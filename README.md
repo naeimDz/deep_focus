@@ -38,6 +38,21 @@ Phase 2 will focus on cloud integration and ecosystem expansion:
 *   **Social & Competitive**: Leaderboards and "Focus Together" rooms using WebSockets for real-time presence.
 *   **System Integrations**: Deep linking with Calendar APIs to auto-block "Focus Time" and DND (Do Not Disturb) mode synchronization.
 
+## 📸 Application Screenshots
+
+### Home Screen (Focus Timer)
+| English | Arabic |
+|:---:|:---:|
+| <img src="assets/screenshot/home_en.png" width="250"> | <img src="assets/screenshot/home_ar.png" width="250"> |
+
+### Settings & Personalization
+| English | Arabic |
+|:---:|:---:|
+| <img src="assets/screenshot/setting_en.png" width="250"> | <img src="assets/screenshot/setting_ar.png" width="250"> |
+
+### Productivity Stats
+<img src="assets/screenshot/stats_en.png" width="250">
+
 ## 📦 Getting Started
 
 1.  **Dependencies**: `flutter pub get`

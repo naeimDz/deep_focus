@@ -21,6 +21,9 @@ dependencies:
   flutter_svg: ^2.2.3
   introduction_screen: ^4.0.0
   lottie: ^3.3.2
+  firebase_core: ^4.3.0
+  firebase_analytics: ^12.1.0
+  firebase_crashlytics: ^5.0.6
 
 dev_dependencies:
   flutter_test:
