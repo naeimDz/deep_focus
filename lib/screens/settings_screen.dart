@@ -65,16 +65,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface, // Replaces background
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('settings'),
-          style: TextStyle(color: colors.onBackground),
+          style: TextStyle(color: colors.onSurface),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: colors.onBackground),
+        iconTheme: IconThemeData(color: colors.onSurface),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -85,7 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Language Section
               _buildSectionHeader(
                 AppLocalizations.of(context).translate('language'),
-                colors.onBackground,
+                colors.onSurface,
               ),
               const SizedBox(height: 10),
               _buildLanguageToggle(colors),
@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Appearance Section
               _buildSectionHeader(
                 AppLocalizations.of(context).translate('appearance'),
-                colors.onBackground,
+                colors.onSurface,
               ),
               const SizedBox(height: 10),
               Container(
@@ -107,14 +107,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     isDark
                         ? AppLocalizations.of(context).translate('dark')
                         : AppLocalizations.of(context).translate('light'),
-                    style: TextStyle(color: colors.onBackground),
+                    style: TextStyle(color: colors.onSurface),
                   ),
                   secondary: Icon(
                     isDark ? Icons.dark_mode : Icons.light_mode,
                     color: AppColors.primary,
                   ),
                   value: isDark,
-                  activeColor: AppColors.primary,
+                  activeTrackColor: AppColors.primary,
                   onChanged: (val) {
                     DeepFocusApp.themeNotifier.value = val
                         ? ThemeMode.dark
@@ -128,7 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Timer Section
               _buildSectionHeader(
                 AppLocalizations.of(context).translate('timer'),
-                colors.onBackground,
+                colors.onSurface,
               ),
               const SizedBox(height: 10),
               Container(
@@ -201,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Automation Section
               _buildSectionHeader(
                 AppLocalizations.of(context).translate('automation'),
-                colors.onBackground,
+                colors.onSurface,
               ),
               const SizedBox(height: 10),
               Container(
@@ -216,16 +216,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         AppLocalizations.of(
                           context,
                         ).translate('auto_start_breaks'),
-                        style: TextStyle(color: colors.onBackground),
+                        style: TextStyle(color: colors.onSurface),
                       ),
                       value: _autoStartBreak,
-                      activeColor: AppColors.primary,
+                      activeTrackColor: AppColors.primary,
                       onChanged: (val) {
                         setState(() => _autoStartBreak = val);
                       },
                     ),
                     Divider(
-                      color: colors.onSurface.withOpacity(0.1),
+                      color: colors.onSurface.withValues(alpha: 0.1),
                       height: 1,
                     ),
                     SwitchListTile(
@@ -233,10 +233,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         AppLocalizations.of(
                           context,
                         ).translate('auto_start_focus'),
-                        style: TextStyle(color: colors.onBackground),
+                        style: TextStyle(color: colors.onSurface),
                       ),
                       value: _autoStartFocus,
-                      activeColor: AppColors.primary,
+                      activeTrackColor: AppColors.primary,
                       onChanged: (val) {
                         setState(() => _autoStartFocus = val);
                       },
@@ -288,11 +288,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         leading: Icon(Icons.language, color: AppColors.primary),
         title: Text(
           isArabic ? "العربية" : "English",
-          style: TextStyle(color: colors.onBackground),
+          style: TextStyle(color: colors.onSurface),
         ),
         trailing: Switch(
           value: isArabic,
-          activeColor: AppColors.primary,
+          activeTrackColor: AppColors.primary,
           onChanged: (val) {
             final newLocale = val ? const Locale('ar') : const Locale('en');
             DeepFocusApp.localeNotifier.value = newLocale;
@@ -306,7 +306,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Text(
       title.toUpperCase(),
       style: TextStyle(
-        color: color.withOpacity(0.6),
+        color: color.withValues(alpha: 0.6),
         fontSize: 12,
         fontWeight: FontWeight.bold,
         letterSpacing: 1.5,
@@ -331,12 +331,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Text(
               title,
-              style: TextStyle(color: colors.onBackground, fontSize: 18),
+              style: TextStyle(color: colors.onSurface, fontSize: 18),
             ),
             Text(
               "$value $unit",
               style: TextStyle(
-                color: colors.onBackground.withOpacity(0.6),
+                color: colors.onSurface.withValues(alpha: 0.6),
                 fontSize: 18,
               ),
             ),
@@ -348,7 +348,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: colors.surface,
             thumbColor: AppColors.primary,
-            overlayColor: AppColors.primary.withOpacity(0.2),
+            overlayColor: AppColors.primary.withValues(alpha: 0.2),
           ),
           child: Slider(
             value: value.toDouble(),

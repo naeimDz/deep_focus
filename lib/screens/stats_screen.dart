@@ -56,15 +56,15 @@ class _StatsScreenState extends State<StatsScreen> {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           AppLocalizations.of(context).translate('productivity_stats'),
-          style: TextStyle(color: colors.onBackground),
+          style: TextStyle(color: colors.onSurface),
         ),
-        iconTheme: IconThemeData(color: colors.onBackground),
+        iconTheme: IconThemeData(color: colors.onSurface),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -78,7 +78,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   Text(
                     AppLocalizations.of(context).translate('last_7_days'),
                     style: TextStyle(
-                      color: colors.onBackground,
+                      color: colors.onSurface,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -89,7 +89,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   Text(
                     AppLocalizations.of(context).translate('last_7_days'),
                     style: TextStyle(
-                      color: colors.onBackground,
+                      color: colors.onSurface,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -112,7 +112,7 @@ class _StatsScreenState extends State<StatsScreen> {
         gradient: AppColors.primaryGradient,
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -160,7 +160,7 @@ class _StatsScreenState extends State<StatsScreen> {
             Text(
               "${entry.value}",
               style: TextStyle(
-                color: colors.onBackground.withOpacity(0.5),
+                color: colors.onSurface.withValues(alpha: 0.5),
                 fontSize: 12,
               ),
             ),
@@ -179,7 +179,7 @@ class _StatsScreenState extends State<StatsScreen> {
               style: TextStyle(
                 color: isToday
                     ? AppColors.primary
-                    : colors.onBackground.withOpacity(0.5),
+                    : colors.onSurface.withValues(alpha: 0.5),
                 fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -221,7 +221,7 @@ class _StatsScreenState extends State<StatsScreen> {
         Text(
           AppLocalizations.of(context).translate('badges'),
           style: TextStyle(
-            color: colors.onBackground,
+            color: colors.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -234,7 +234,8 @@ class _StatsScreenState extends State<StatsScreen> {
             crossAxisCount: 2, // 2 columns for better visibility
             crossAxisSpacing: 15,
             mainAxisSpacing: 15,
-            childAspectRatio: 2.5, // Rectangular cards
+            childAspectRatio:
+                2.1, // Rectangular cards (Adjusted for text overflow)
           ),
           itemCount: _badges.length,
           itemBuilder: (context, index) {
@@ -245,13 +246,15 @@ class _StatsScreenState extends State<StatsScreen> {
                 color: colors.surface,
                 borderRadius: BorderRadius.circular(15),
                 border: badge.isLocked
-                    ? Border.all(color: colors.onSurface.withOpacity(0.1))
-                    : Border.all(color: AppColors.primary.withOpacity(0.5)),
+                    ? Border.all(color: colors.onSurface.withValues(alpha: 0.1))
+                    : Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.5),
+                      ),
                 boxShadow: badge.isLocked
                     ? []
                     : [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: AppColors.primary.withValues(alpha: 0.1),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -263,8 +266,8 @@ class _StatsScreenState extends State<StatsScreen> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: badge.isLocked
-                          ? Colors.grey.withOpacity(0.2)
-                          : AppColors.primary.withOpacity(0.2),
+                          ? Colors.grey.withValues(alpha: 0.2)
+                          : AppColors.primary.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -285,8 +288,8 @@ class _StatsScreenState extends State<StatsScreen> {
                           ).translate(badge.translationKeyName),
                           style: TextStyle(
                             color: badge.isLocked
-                                ? colors.onBackground.withOpacity(0.5)
-                                : colors.onBackground,
+                                ? colors.onSurface.withValues(alpha: 0.5)
+                                : colors.onSurface,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -298,7 +301,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             context,
                           ).translate(badge.translationKeyDesc),
                           style: TextStyle(
-                            color: colors.onBackground.withOpacity(0.5),
+                            color: colors.onSurface.withValues(alpha: 0.5),
                             fontSize: 10,
                           ),
                           maxLines: 2,
@@ -327,7 +330,7 @@ class _StatsScreenState extends State<StatsScreen> {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: accentColor.withOpacity(0.3)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +338,7 @@ class _StatsScreenState extends State<StatsScreen> {
           Text(
             title.toUpperCase(),
             style: TextStyle(
-              color: colors.onBackground.withOpacity(0.6),
+              color: colors.onSurface.withValues(alpha: 0.6),
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),

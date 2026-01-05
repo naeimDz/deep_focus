@@ -261,20 +261,20 @@ class _HomeScreenState extends State<HomeScreen>
         elevation: 0,
         title: Text(
           RemoteConfigService().getString(AppConfig.welcomeMessage),
-          style: TextStyle(color: colors.onBackground),
+          style: TextStyle(color: colors.onSurface),
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.music_note_rounded,
-              color: colors.onSurface.withOpacity(0.7),
+              color: colors.onSurface.withValues(alpha: 0.7),
             ),
             onPressed: _showSoundSelector,
           ),
           IconButton(
             icon: Icon(
               Icons.bar_chart_rounded,
-              color: colors.onSurface.withOpacity(0.7),
+              color: colors.onSurface.withValues(alpha: 0.7),
             ),
             onPressed: () => Navigator.push(
               context,
@@ -284,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: Icon(
               Icons.settings,
-              color: colors.onSurface.withOpacity(0.7),
+              color: colors.onSurface.withValues(alpha: 0.7),
             ),
             onPressed: _openSettings,
           ),
@@ -331,18 +331,20 @@ class _HomeScreenState extends State<HomeScreen>
                                         vertical: 12,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: colors.surface.withOpacity(0.1),
+                                        color: colors.surface.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         borderRadius: BorderRadius.circular(30),
                                         border: Border.all(
-                                          color: colors.onSurface.withOpacity(
-                                            0.1,
+                                          color: colors.onSurface.withValues(
+                                            alpha: 0.1,
                                           ),
                                         ),
                                       ),
                                       child: Text(
                                         _getModeLabel(),
                                         style: TextStyle(
-                                          color: colors.onBackground,
+                                          color: colors.onSurface,
                                           fontSize: 16,
                                           letterSpacing: 1.2,
                                           fontWeight: FontWeight.w500,
@@ -389,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               boxShadow: [
                                                 BoxShadow(
                                                   color: AppColors.primary
-                                                      .withOpacity(0.4),
+                                                      .withValues(alpha: 0.4),
                                                   blurRadius: 20,
                                                   offset: const Offset(0, 10),
                                                 ),
@@ -411,8 +413,8 @@ class _HomeScreenState extends State<HomeScreen>
                                           iconSize: 40,
                                           icon: Icon(
                                             Icons.stop_circle_outlined,
-                                            color: colors.onSurface.withOpacity(
-                                              0.5,
+                                            color: colors.onSurface.withValues(
+                                              alpha: 0.5,
                                             ),
                                           ),
                                           onPressed: _resetTimer,
@@ -424,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       onPressed: _switchMode,
                                       style: TextButton.styleFrom(
                                         foregroundColor: colors.onSurface
-                                            .withOpacity(0.7),
+                                            .withValues(alpha: 0.7),
                                       ),
                                       child: Text(
                                         _isBreak
@@ -461,8 +463,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   String _getModeLabel() {
     if (!_isBreak) return AppLocalizations.of(context).translate('focus_time');
-    if (_timerService.currentDuration == _longBreakMinutes * 60)
+    if (_timerService.currentDuration == _longBreakMinutes * 60) {
       return AppLocalizations.of(context).translate('long_break');
+    }
     return AppLocalizations.of(context).translate('break_time');
   }
 
@@ -484,7 +487,7 @@ class _HomeScreenState extends State<HomeScreen>
               Text(
                 AppLocalizations.of(context).translate('soundscapes'),
                 style: TextStyle(
-                  color: colors.onBackground,
+                  color: colors.onSurface,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -506,9 +509,7 @@ class _HomeScreenState extends State<HomeScreen>
                   title: Text(
                     sound,
                     style: TextStyle(
-                      color: isSelected
-                          ? AppColors.primary
-                          : colors.onBackground,
+                      color: isSelected ? AppColors.primary : colors.onSurface,
                       fontWeight: isSelected
                           ? FontWeight.bold
                           : FontWeight.normal,
@@ -547,14 +548,14 @@ class _HomeScreenState extends State<HomeScreen>
           backgroundColor: colors.surface,
           title: Text(
             AppLocalizations.of(context).translate('congratulations'),
-            style: TextStyle(color: colors.onBackground),
+            style: TextStyle(color: colors.onSurface),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppLocalizations.of(context).translate('badge_unlocked'),
-                style: TextStyle(color: colors.onBackground),
+                style: TextStyle(color: colors.onSurface),
               ),
               const SizedBox(height: 20),
               ...newBadges.map(
@@ -565,7 +566,7 @@ class _HomeScreenState extends State<HomeScreen>
                       context,
                     ).translate(badge.translationKeyName),
                     style: TextStyle(
-                      color: colors.onBackground,
+                      color: colors.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -574,7 +575,7 @@ class _HomeScreenState extends State<HomeScreen>
                       context,
                     ).translate(badge.translationKeyDesc),
                     style: TextStyle(
-                      color: colors.onBackground.withOpacity(0.7),
+                      color: colors.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ),
@@ -601,11 +602,11 @@ class _HomeScreenState extends State<HomeScreen>
           backgroundColor: colors.surface,
           title: Text(
             AppLocalizations.of(context).translate('micro_fail_title'),
-            style: TextStyle(color: colors.onBackground),
+            style: TextStyle(color: colors.onSurface),
           ),
           content: Text(
             AppLocalizations.of(context).translate('micro_fail_body'),
-            style: TextStyle(color: colors.onBackground),
+            style: TextStyle(color: colors.onSurface),
           ),
           actions: [
             TextButton(
@@ -647,7 +648,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildRitualOverlay(ColorScheme colors) {
     return Container(
-      color: colors.background, // Full screen opaque
+      color: colors.surface, // Full screen opaque
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -659,10 +660,10 @@ class _HomeScreenState extends State<HomeScreen>
                 height: 150,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.5),
+                      color: AppColors.primary.withValues(alpha: 0.5),
                       blurRadius: 50,
                       spreadRadius: 10,
                     ),
@@ -681,7 +682,7 @@ class _HomeScreenState extends State<HomeScreen>
             Text(
               AppLocalizations.of(context).translate('ritual_phrase'),
               style: TextStyle(
-                color: colors.onBackground,
+                color: colors.onSurface,
                 fontSize: 24,
                 fontWeight: FontWeight.w300,
                 letterSpacing: 2.0,

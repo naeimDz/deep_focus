@@ -26,7 +26,7 @@ class CircularTimer extends StatelessWidget {
         style: TextStyle(
           fontSize: 80.0,
           fontWeight: FontWeight.w200,
-          color: colors.onBackground,
+          color: colors.onSurface,
         ),
       ),
       progressColor: AppColors.primary,
@@ -41,7 +41,7 @@ class CircularTimer extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.5),
+                color: AppColors.primary.withValues(alpha: 0.5),
                 blurRadius: 20,
                 spreadRadius: 5,
               ),

@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, size: 100, color: color),
@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       bodyTextStyle: TextStyle(
         fontSize: 19.0,
-        color: textColor.withOpacity(0.8),
+        color: textColor.withValues(alpha: 0.8),
       ),
       bodyPadding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
       pageColor: backgroundColor,
@@ -110,7 +110,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: DotsDecorator(
         size: const Size(10.0, 10.0),
-        color: textColor.withOpacity(0.4),
+        color: textColor.withValues(alpha: 0.4),
         activeSize: const Size(22.0, 10.0),
         activeShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),

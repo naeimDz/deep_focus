@@ -1,4 +1,6 @@
+import 'dart:ui'; // Added for PlatformDispatcher
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // Added for kDebugMode
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -14,8 +16,22 @@ import 'screens/onboarding_screen.dart';
 import 'services/remote_config_service.dart';
 import 'services/notification_service.dart'; // Added
 
+// DEV MODE: Set to false if you want to work on UI without background crashes
+const bool kEnableBackgroundServices = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Robust Error Logging
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    debugPrint("Flutter Error: ${details.exception}");
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint("Async Error: $error");
+    debugPrint("Stack Trace: $stack");
+    return true;
+  };
 
   try {
     await Firebase.initializeApp(
@@ -25,8 +41,7 @@ void main() async {
     await RemoteConfigService().initialize();
 
     // Initialize Notifications
-    await NotificationService().initialize();
-    await NotificationService().requestPermissions();
+    // Moved to DeepFocusApp.initState to prevent startup crashes
   } catch (e) {
     debugPrint(
       "Firebase initialization failed (Run flutterfire configure): $e",
@@ -60,6 +75,25 @@ class _DeepFocusAppState extends State<DeepFocusApp> {
     super.initState();
     _loadLocale();
     DeepFocusApp.localeNotifier.addListener(_saveLocale);
+
+    if (kEnableBackgroundServices) {
+      _initServices(); // Start background services only if enabled
+    }
+  }
+
+  Future<void> _initServices() async {
+    // Add a slight delay to ensure UI is ready
+    await Future.delayed(const Duration(seconds: 1));
+
+    try {
+      debugPrint("🚀 Starting Service Initialization...");
+      await NotificationService().initialize();
+      await NotificationService().requestPermissions();
+      await NotificationService().initializeFCM();
+      debugPrint("✅ Service Initialization Complete");
+    } catch (e) {
+      debugPrint("❌ Service Init Error: $e");
+    }
   }
 
   Future<void> _loadLocale() async {
@@ -82,10 +116,10 @@ class _DeepFocusAppState extends State<DeepFocusApp> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: DeepFocusApp.themeNotifier,
-      builder: (_, ThemeMode currentMode, __) {
+      builder: (_, ThemeMode currentMode, child) {
         return ValueListenableBuilder<Locale>(
           valueListenable: DeepFocusApp.localeNotifier,
-          builder: (_, Locale currentLocale, __) {
+          builder: (_, Locale currentLocale, child) {
             return MaterialApp(
               title: 'Deep Focus',
               debugShowCheckedModeBanner: false,
@@ -94,10 +128,8 @@ class _DeepFocusAppState extends State<DeepFocusApp> {
                 brightness: Brightness.light,
                 colorScheme: const ColorScheme.light(
                   primary: AppColors.primary,
-                  background: AppColors.lightBackground,
                   surface: Colors.white,
-                  onBackground: Colors.black,
-                  onSurface: Colors.black,
+                  onSurface: Colors.black, // Replaces onBackground
                 ),
                 scaffoldBackgroundColor: AppColors.lightBackground,
                 textTheme: GoogleFonts.outfitTextTheme(
@@ -118,10 +150,8 @@ class _DeepFocusAppState extends State<DeepFocusApp> {
                 brightness: Brightness.dark,
                 colorScheme: const ColorScheme.dark(
                   primary: AppColors.primary,
-                  background: AppColors.darkBackground,
-                  surface: Color(0xFF1E1E2C),
-                  onBackground: Colors.white,
-                  onSurface: Colors.white,
+                  surface: Color(0xFF1E1E2C), // Dark surface
+                  onSurface: Colors.white, // Replaces onBackground
                 ),
                 scaffoldBackgroundColor: AppColors.darkBackground,
                 textTheme: GoogleFonts.outfitTextTheme(

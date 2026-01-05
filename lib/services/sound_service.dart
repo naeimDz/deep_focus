@@ -26,11 +26,14 @@ class SoundService {
     if (path.isEmpty) return;
 
     try {
-      // In a real app we would play the asset.
-      // For MVP without assets, we just log.
-      // await _audioPlayer.play(AssetSource(path));
-      // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-      debugPrint("Playing sound: $name ($path)");
+      // releaseMode needs to be set after setting the source or before playing,
+      // but explicitly setting source often helps reliable looping.
+      await _audioPlayer.stop(); // Ensure clean state
+      await _audioPlayer.setSource(AssetSource(path));
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer.resume();
+
+      debugPrint("Playing sound: $name ($path) in loop mode");
 
       _currentSound = name;
       _isPlaying = true;

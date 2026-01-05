@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart'; // Added
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -6,7 +7,12 @@ import 'package:flutter/foundation.dart';
 
 /// Defines the Types of interruptions (Channels)
 /// Centralizes configuration involved with Priority and Sound.
-enum NotificationChannelType { timerFinished, streakRescue }
+enum NotificationChannelType { timerFinished, streakRescue, marketing }
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  debugPrint("Handling a background message: ${message.messageId}");
+}
 
 extension ChannelConfig on NotificationChannelType {
   String get id {
@@ -15,6 +21,8 @@ extension ChannelConfig on NotificationChannelType {
         return 'deep_focus_timer';
       case NotificationChannelType.streakRescue:
         return 'deep_focus_retention';
+      case NotificationChannelType.marketing:
+        return 'deep_focus_news';
     }
   }
 
@@ -24,6 +32,8 @@ extension ChannelConfig on NotificationChannelType {
         return 'Timer Notifications';
       case NotificationChannelType.streakRescue:
         return 'Streak Rescue';
+      case NotificationChannelType.marketing:
+        return 'Deep Focus News';
     }
   }
 
@@ -33,6 +43,8 @@ extension ChannelConfig on NotificationChannelType {
         return 'Notifies when a focus session is complete';
       case NotificationChannelType.streakRescue:
         return 'Reminds you to keep your daily streak';
+      case NotificationChannelType.marketing:
+        return 'Updates and tips from the Deep Focus team';
     }
   }
 
@@ -42,6 +54,8 @@ extension ChannelConfig on NotificationChannelType {
         return Importance.max; // Pop up + Sound
       case NotificationChannelType.streakRescue:
         return Importance.defaultImportance; // Standard shade entry
+      case NotificationChannelType.marketing:
+        return Importance.defaultImportance;
     }
   }
 
@@ -50,6 +64,8 @@ extension ChannelConfig on NotificationChannelType {
       case NotificationChannelType.timerFinished:
         return Priority.high;
       case NotificationChannelType.streakRescue:
+        return Priority.defaultPriority;
+      case NotificationChannelType.marketing:
         return Priority.defaultPriority;
     }
   }
@@ -118,6 +134,38 @@ class NotificationService {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
+  Future<void> initializeFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // 1. Request Permission
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    debugPrint('User granted FCM permission: ${settings.authorizationStatus}');
+
+    // 2. Background Handler
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    // 3. Foreground Handler
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('Got a message whilst in the foreground!');
+      if (message.notification != null) {
+        showInstant(
+          channel: NotificationChannelType.marketing,
+          title: message.notification!.title ?? 'New Message',
+          body: message.notification!.body ?? '',
+        );
+      }
+    });
+
+    // 4. Log Token
+    String? token = await messaging.getToken();
+    debugPrint("🔥 FCM Token: $token");
+    // TODO: Send this token to backend if needed
+  }
+
   // --- Core API ---
 
   Future<void> showInstant({
@@ -126,6 +174,7 @@ class NotificationService {
     required String body,
     int id = 0,
   }) async {
+    if (!_isInitialized) return;
     await _notificationsPlugin.show(id, title, body, _buildDetails(channel));
   }
 
@@ -136,6 +185,7 @@ class NotificationService {
     required Duration delay,
     int id = 1, // Default ID 1 for Retention (Idempotent)
   }) async {
+    if (!_isInitialized) return;
     try {
       final scheduledTime = tz.TZDateTime.now(tz.local).add(delay);
 
@@ -154,10 +204,12 @@ class NotificationService {
   }
 
   Future<void> cancel(int id) async {
+    if (!_isInitialized) return;
     await _notificationsPlugin.cancel(id);
   }
 
   Future<void> cancelAll() async {
+    if (!_isInitialized) return;
     await _notificationsPlugin.cancelAll();
   }
 
