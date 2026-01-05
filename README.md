@@ -42,7 +42,6 @@ Phase 2 will focus on cloud integration and ecosystem expansion:
 
 1.  **Dependencies**: `flutter pub get`
 2.  **Run**: `flutter run`
-3.  **Assets**: Ensure `assets/sounds/` contains the necessary MP3 files (Rain, White Noise) for the audio engine to fully function.
 
 ---
-*Engineered by Antigravity*
+
