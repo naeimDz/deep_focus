@@ -13,6 +13,8 @@ This project demonstrates a scalable, maintainable architecture suitable for pro
 *   **Adaptive Layouts**: Responsive implementation handling various screen sizes and orientations via `LayoutBuilder` and flexible constraint solving.
 *   **Global Localization**: Full multi-language support (English & Arabic) with automatic RTL (Right-to-Left) layout mirroring and dynamic language switching.
 *   **Gamification System**: Engagement engine featuring daily streaks, XP-based leveling, and unlockable achievement badges to motivate consistent focus.
+*   **Onboarding Experience**: A modern, animated 3-step introduction (Focus -> Rituals -> Gamification) utilizing `introduction_screen` to guide new users.
+*   **Firebase Integration**: Deep integration with Google's Firebase suite, featuring **Analytics** for user behavior tracking and **Crashlytics** for real-time stability monitoring.
 
 ## 🛠️ Engineering Approach
 

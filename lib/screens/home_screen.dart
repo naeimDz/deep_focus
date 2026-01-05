@@ -10,6 +10,7 @@ import '../widgets/circular_timer.dart';
 import 'settings_screen.dart';
 import 'stats_screen.dart'; // Added
 import '../services/gamification_service.dart';
+import '../services/remote_config_service.dart'; // Added
 import '../models/badge.dart' as model;
 
 class HomeScreen extends StatefulWidget {
@@ -258,7 +259,10 @@ class _HomeScreenState extends State<HomeScreen>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("Deep Focus", style: TextStyle(color: colors.onBackground)),
+        title: Text(
+          RemoteConfigService().getString(AppConfig.welcomeMessage),
+          style: TextStyle(color: colors.onBackground),
+        ),
         actions: [
           IconButton(
             icon: Icon(

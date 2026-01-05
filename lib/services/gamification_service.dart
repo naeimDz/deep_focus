@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'remote_config_service.dart';
 import '../models/badge.dart' as model;
 
 class GamificationService {
@@ -88,9 +89,11 @@ class GamificationService {
     final prefs = await SharedPreferences.getInstance();
 
     // 1. Update XP
-    // 10 XP per minute
-    final int xpGained = minutes * 10;
-    _xp += xpGained;
+    // Apply Remote Config Multiplier
+    double multiplier = RemoteConfigService().getDouble(AppConfig.xpMultiplier);
+    int earnedXp = (minutes * multiplier).round();
+
+    _xp += earnedXp;
     await prefs.setInt(_xpKey, _xp);
 
     // 2. Update Sessions Count

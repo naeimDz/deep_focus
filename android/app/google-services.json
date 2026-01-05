@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84889783474",
+    "project_id": "deep-focus-d140c",
+    "storage_bucket": "deep-focus-d140c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84889783474:android:3d87d34cee6b2f536c8dab",
+        "android_client_info": {
+          "package_name": "com.example.deep_focus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz6cnwWAkr4poFx3L1uz6iWP12OpleaTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

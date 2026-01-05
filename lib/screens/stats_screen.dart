@@ -95,7 +95,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(height: 250, child: _buildChart(colors)),
+                  SizedBox(height: 300, child: _buildChart(colors)),
                   const SizedBox(height: 40), // Extra bottom padding
                 ],
               ),
