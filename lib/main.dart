@@ -12,6 +12,7 @@ import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/remote_config_service.dart';
+import 'services/notification_service.dart'; // Added
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,10 @@ void main() async {
     );
     // Initialize Remote Config
     await RemoteConfigService().initialize();
+
+    // Initialize Notifications
+    await NotificationService().initialize();
+    await NotificationService().requestPermissions();
   } catch (e) {
     debugPrint(
       "Firebase initialization failed (Run flutterfire configure): $e",

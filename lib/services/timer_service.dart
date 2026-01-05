@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'notification_service.dart'; // Added
 
 class TimerService {
   Timer? _timer;
@@ -26,6 +27,20 @@ class TimerService {
     if (_isRunning) return;
 
     _isRunning = true;
+
+    // Notification Logic: Schedule "Finished" alarm immediately
+    // This ensures it rings even if the app is killed/backgrounded.
+    NotificationService().cancel(0); // Cancel generic
+    NotificationService().cancel(1); // Cancel Streak Rescue (User is here!)
+
+    NotificationService().schedule(
+      channel: NotificationChannelType.timerFinished,
+      title: 'Time is up! ⏰',
+      body: 'Focus session completed. Take a break!',
+      delay: Duration(seconds: _remainingTime),
+      id: 100, // ID for Timer
+    );
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
         _remainingTime--;
@@ -49,6 +64,17 @@ class TimerService {
   void stopTimer() {
     _timer?.cancel();
     _isRunning = false;
+
+    // Cancel the "Timer Finished" alarm since we stopped manually
+    NotificationService().cancel(100);
+
+    // Schedule "Streak Rescue" since user might be leaving
+    NotificationService().schedule(
+      channel: NotificationChannelType.streakRescue,
+      title: 'Don\'t lose your streak! 🔥',
+      body: 'Come back and focus to maintain your momentum.',
+      delay: const Duration(hours: 24),
+    );
   }
 
   void pauseTimer() {
