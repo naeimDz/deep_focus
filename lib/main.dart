@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'constants.dart';
+import 'l10n/app_localizations.dart';
+import 'screens/home_screen.dart';
+import 'screens/onboarding_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final showOnboarding = !prefs.containsKey('onboarding_seen');
+
+  runApp(DeepFocusApp(showOnboarding: showOnboarding));
+}
+
+class DeepFocusApp extends StatefulWidget {
+  final bool showOnboarding;
+  const DeepFocusApp({super.key, required this.showOnboarding});
+
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(
+    ThemeMode.dark,
+  );
+  static final ValueNotifier<Locale> localeNotifier = ValueNotifier(
+    const Locale('en'),
+  );
+
+  @override
+  State<DeepFocusApp> createState() => _DeepFocusAppState();
+}
+
+class _DeepFocusAppState extends State<DeepFocusApp> {
+  @override
+  void initState() {
+    super.initState();
+    _loadLocale();
+    DeepFocusApp.localeNotifier.addListener(_saveLocale);
+  }
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString('language_code');
+    if (languageCode != null) {
+      DeepFocusApp.localeNotifier.value = Locale(languageCode);
+    }
+  }
+
+  Future<void> _saveLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'language_code',
+      DeepFocusApp.localeNotifier.value.languageCode,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: DeepFocusApp.themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return ValueListenableBuilder<Locale>(
+          valueListenable: DeepFocusApp.localeNotifier,
+          builder: (_, Locale currentLocale, __) {
+            return MaterialApp(
+              title: 'Deep Focus',
+              debugShowCheckedModeBanner: false,
+              themeMode: currentMode,
+              theme: ThemeData(
+                brightness: Brightness.light,
+                colorScheme: const ColorScheme.light(
+                  primary: AppColors.primary,
+                  background: AppColors.lightBackground,
+                  surface: Colors.white,
+                  onBackground: Colors.black,
+                  onSurface: Colors.black,
+                ),
+                scaffoldBackgroundColor: AppColors.lightBackground,
+                textTheme: GoogleFonts.outfitTextTheme(
+                  ThemeData.light().textTheme,
+                ),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  titleTextStyle: GoogleFonts.outfit(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                colorScheme: const ColorScheme.dark(
+                  primary: AppColors.primary,
+                  background: AppColors.darkBackground,
+                  surface: Color(0xFF1E1E2C),
+                  onBackground: Colors.white,
+                  onSurface: Colors.white,
+                ),
+                scaffoldBackgroundColor: AppColors.darkBackground,
+                textTheme: GoogleFonts.outfitTextTheme(
+                  ThemeData.dark().textTheme,
+                ),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  titleTextStyle: GoogleFonts.outfit(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                useMaterial3: true,
+              ),
+
+              // Localization
+              locale: currentLocale,
+              supportedLocales: const [Locale('en'), Locale('ar')],
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+
+              home: widget.showOnboarding
+                  ? const OnboardingScreen()
+                  : const HomeScreen(),
+            );
+          },
+        );
+      },
+    );
+  }
+}

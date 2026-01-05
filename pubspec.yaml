@@ -1,0 +1,33 @@
+name: deep_focus
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.4
+  percent_indicator: ^4.2.5
+  audioplayers: ^6.5.1
+  google_fonts: ^6.3.3
+  intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
+  flutter_svg: ^2.2.3
+  introduction_screen: ^4.0.0
+  lottie: ^3.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/sounds/
