@@ -14,7 +14,8 @@ import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/remote_config_service.dart';
-import 'services/notification_service.dart'; // Added
+import 'services/notification_service.dart';
+import 'services/ad_service.dart'; // Added
 
 // DEV MODE: Set to false if you want to work on UI without background crashes
 const bool kEnableBackgroundServices = false;
@@ -89,7 +90,9 @@ class _DeepFocusAppState extends State<DeepFocusApp> {
       debugPrint("🚀 Starting Service Initialization...");
       await NotificationService().initialize();
       await NotificationService().requestPermissions();
+      await NotificationService().requestPermissions();
       await NotificationService().initializeFCM();
+      await AdService().initialize(); // Initialize AdMob
       debugPrint("✅ Service Initialization Complete");
     } catch (e) {
       debugPrint("❌ Service Init Error: $e");

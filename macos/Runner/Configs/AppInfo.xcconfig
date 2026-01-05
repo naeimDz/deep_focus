@@ -8,7 +8,7 @@
 PRODUCT_NAME = deep_focus
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.deepFocus
+PRODUCT_BUNDLE_IDENTIFIER = com.naeim.deepFocus
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.naeim. All rights reserved.

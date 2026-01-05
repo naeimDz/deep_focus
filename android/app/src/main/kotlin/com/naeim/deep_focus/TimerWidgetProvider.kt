@@ -1,4 +1,4 @@
-package com.example.deep_focus
+package com.naeim.deep_focus
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
