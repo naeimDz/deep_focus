@@ -1,8 +1,10 @@
 import 'dart:async';
-import 'notification_service.dart'; // Added
+import 'notification_service.dart';
+import 'widget_service.dart'; // Added
 
 class TimerService {
   Timer? _timer;
+  final WidgetService _widgetService = WidgetService(); // Added
   int _currentDuration = 1500; // 25 minutes in seconds
   int _remainingTime = 1500;
   bool _isRunning = false;
@@ -21,12 +23,14 @@ class TimerService {
     if (_isRunning) return; // Prevent changing length while running
     _currentDuration = seconds;
     _remainingTime = seconds;
+    _updateWidget(); // Sync initial state
   }
 
   void startTimer() {
     if (_isRunning) return;
 
     _isRunning = true;
+    _updateWidget(); // Sync start state
 
     // Notification Logic: Schedule "Finished" alarm immediately
     // This ensures it rings even if the app is killed/backgrounded.
@@ -51,6 +55,7 @@ class TimerService {
           // Usually pomodoro depletes. Let's return remaining percentage.
           double progress = _remainingTime / _currentDuration;
           onTick!(progress);
+          _updateWidget(); // Sync on tick
         }
       } else {
         stopTimer();
@@ -64,6 +69,7 @@ class TimerService {
   void stopTimer() {
     _timer?.cancel();
     _isRunning = false;
+    _updateWidget(); // Sync stop state
 
     // Cancel the "Timer Finished" alarm since we stopped manually
     NotificationService().cancel(100);
@@ -87,6 +93,24 @@ class TimerService {
     if (onTick != null) {
       onTick!(1.0);
     }
+    _updateWidget(); // Sync reset state
+  }
+
+  void _updateWidget() {
+    int minutes = _remainingTime ~/ 60;
+    int seconds = _remainingTime % 60;
+    final timeString =
+        "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+
+    double percent = _currentDuration > 0
+        ? (_remainingTime / _currentDuration)
+        : 1.0;
+
+    _widgetService.updateWidget(
+      percent: percent,
+      timeString: timeString,
+      isRunning: _isRunning,
+    );
   }
 
   void dispose() {
