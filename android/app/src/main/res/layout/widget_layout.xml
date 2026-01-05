@@ -1,49 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background"
-    android:padding="16dp">
+    android:padding="12dp">
 
-    <!-- Progress Indicator (Simplified) -->
-    <ProgressBar
-        android:id="@+id/widget_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:max="100"
-        android:progress="75"
-        android:progressDrawable="@drawable/circular_progress"
-        android:rotation="-90" />
+    <!-- Widget Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="Deep Focus"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp"
+        android:letterSpacing="0.05"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium" />
 
-    <LinearLayout
+    <!-- Container to keep aspect ratio centered -->
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginTop="16dp">
 
-        <!-- Timer Text -->
-        <TextView
-            android:id="@+id/widget_timer_text"
+        <!-- Progress Indicator (Upscaled for 2x2) -->
+        <ProgressBar
+            android:id="@+id/widget_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:max="100"
+            android:progress="75"
+            android:progressDrawable="@drawable/circular_progress"
+            android:rotation="-90" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="25:00"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <!-- Status -->
-        <TextView
-            android:id="@+id/widget_status_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="FOCUS"
-            android:textColor="#CCFFFFFF"
-            android:textSize="12sp"
-            android:letterSpacing="0.1"/>
-    </LinearLayout>
+            <!-- Timer Text -->
+            <TextView
+                android:id="@+id/widget_timer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25:00"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp"
+                android:fontFamily="sans-serif-medium"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:includeFontPadding="false" />
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/widget_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:text="FOCUS"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp"
+                android:letterSpacing="0.2"
+                android:textAllCaps="true" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>
